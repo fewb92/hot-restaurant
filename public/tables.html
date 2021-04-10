@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Hot Resturaunt - Booked Tables</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Super Hot Restaurant</h1>
+        <hr class="my-4">
+        <p>Make Your Reservation</p>
+        <a class="btn btn-primary btn-lg" href="/reservation" role="button">Make Reservations</a>
+        <!-- code via fontawesome for button to navigate to homepage (index.html) -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+           <div class="card">
+               <div class="card-header">
+                   <h4>Current Reservations</h4>
+               </div>
+               <div class="card-body">
+                    <ul id="tableList" class="list-group"><ul>
+               </div>  
+           </div> 
+
+           <!--waiting list-->
+           <div class="card mt-4">
+               <div class="card-header">
+                   <h4>Waiting List</h4>
+               </div>
+               <div class="card-body">
+                   <ul id="waitList" class="list-group"></ul>
+               </div>
+           </div>
+        </div>
+        
+    </div>
+
+    <!-- code for tables that have already been reserved-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    function runTable() {
+        $.ajax({ url:"/api/tables", type: "GET", dataType: "json"})
+            .then(function(tableData){
+
+                let tableList = $("#tableList");
+
+                let listItem = $("<li class='list-group-item my-4'>");
+
+            console.log(tableData)
+             for (var i = 0; i <tableData.length; i++) {
+                
+                
+             listItem.append(
+                 $("<h2>").text("Table #" + (i + 1)),
+                 $("<hr>"),
+                 $("<h2>").text("Name: " + tableData[i].name),
+                 $("<h2>").text("Phone: " + tableData[i].phone),
+                 $("<h2>").text("Email: " + tableData[i].email),
+                 $("<h2>").text("uniqueID: " + tableData[i].uniqueID)
+                
+             );
+
+             tableList.append(listItem);
+             }
+            
+
+         });
+     }
+
+     function runWaitList() {
+         $.ajax({url: "/api/waitlist", type: "GET", dataType: "json"})
+             .then(function(waitData) {
+
+                 for (var i = 0; i <waitData.length; i++) {
+                
+                 let waitList = $("#waitList");
+
+                 let listItem = $("<li class='list-group-item mt-4'>");
+
+             listItem.append(
+                 $("<h2>").text("Table #" + (i + 1)),
+                 $("<hr>"),
+                 $("<h2>").text("Name: " + waitData[i].name),
+                 $("<h2>").text("Phone: " + waitData[i].phone),
+                 $("<h2>").text("Email: " + waitData[i].email),
+                 $("<h2>").text("uniqueID: " + waitData[i].uniqueID)
+             );
+
+             waitList.append(listItem);
+             }
+         });
+     }
+
+     function clearTable() {
+         $.ajax({ url: "/api/clear", method: "POST"}).then(function(){
+             $("#waitList").empty();
+             $("#tableList").empty();
+        
+         });
+     }
+
+     $("#clear").on("click", clearTable);
+
+    runTable();
+    runWaitList();
+    
+</script>
+</body>
+</html>
