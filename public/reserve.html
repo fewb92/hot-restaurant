@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Hot Resturaunt - Reserve a Table</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Super Hot Restaurant</h1>
+        <hr class="my-4">
+        <p>Make Your Reservation</p>
+        <a class="btn btn-primary btn-lg" href="/tables" role="button">View Tables</a>
+        <!-- code via fontawesome for button to navigate to homepage (index.html) -->
+    </div>
+    <!-- <form> -->    
+    <div class="row">
+        <div class="col-lg-12">
+          <!-- Reservation Page -->
+          <div class="card">
+            <div class="card-header">
+              Table Reservation
+            </div>
+            <div class="card-body">
+              <form role="form">
+                <div class="form-group">
+                  <label for="reserve-name">Name</label>
+                  <input type="text" class="form-control" id="reserve-name">
+                </div>
+                <div class="form-group">
+                  <label for="reserve-phone">Phone Number</label>
+                  <input type="text" class="form-control" id="reserve-phone">
+                </div>
+                <div class="form-group">
+                  <label for="reserve-email">Email</label>
+                  <input type="text" class="form-control" id="reserve-email">
+                </div>
+                <div class="form-group">
+                  <label for="reserve-unique-id">Unique ID</label>
+                  <input type="text" class="form-control" id="reserve-unique-id">
+                </div>
+                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type = "text/javascript">
+    // let reserveName = document.querySelector("#reserve-name")
+    // let reservePhone = document.querySelector("#reserve-phone")
+    // let reserveEmail = document.querySelector("#reserve-email")
+    // let reserveID = document.querySelector("#reserve-unique-id")
+    // creating an object and sending it to the backend
+    $(".submit-btn").click(function (e) {
+        e.preventDefault()
+        console.log('button clicked')
+    
+        let newReservation = {
+            name: $('#reserve-name').val().trim(),
+            phone: $('#reserve-phone').val().trim(),
+            email: $('#reserve-email').val().trim(),
+            uniqueID: $('#reserve-unique-id').val().trim(),
+        }
+    
+        //$.post(URL,data,callback);
+        $.post("/api/tables", //URL
+            newReservation, //Data
+            function (data) { //Successful 
+                if(data){
+                    alert("Data was posted to the server")
+                } else {
+                    alert("You are waited listed")
+                }
+                $("#reserve-name").val("");
+                $("#reserve-phone").val("");
+                $("#reserve-email").val("");
+                $("#reserve-unique-id").val("");
+            })
+    })
+    </script>
+</body>
+</html>
